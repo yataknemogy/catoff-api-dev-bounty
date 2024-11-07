@@ -20,7 +20,7 @@ app.use('/api/challenges', challengeRoutes);
 app.use('/api/descriptions', descriptionRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/tournament', tournamentRoutes);
-app.use('/api/bet/', betRoutes);
+app.use('/api/bets/', betRoutes);
 app.use('/api/notification', notificationRoutes);
 
 app.use((req: Request, res: Response) => {

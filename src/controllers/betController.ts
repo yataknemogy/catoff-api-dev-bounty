@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { placeBetService } from '../services/betService';
+import {getBetStatusService, placeBetService} from '../services/betService';
 import { IPlaceBet } from '../types/types';
 import Joi from 'joi';
 
@@ -25,6 +25,26 @@ export const placeBet = async (req: Request, res: Response, next: NextFunction) 
         }
 
         res.status(201).json({ message: 'Bet placed successfully', data: result.data });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getBetStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const betID = parseInt(req.params.betID, 10);
+
+        if (isNaN(betID)) {
+            res.status(400).json({ message: 'Invalid bet ID. Must be a number.' });
+        }
+
+        const result = await getBetStatusService(betID);
+
+        if (result.error) {
+            res.status(500).json({ message: 'Failed to fetch bet status', error: result.error });
+        }
+
+        res.status(200).json({ message: 'Bet status retrieved successfully', data: result.data });
     } catch (error) {
         next(error);
     }

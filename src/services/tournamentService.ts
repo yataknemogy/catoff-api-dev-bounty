@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ONCHAIN_CONFIG } from '../config';
 import { ICreateTournament, ITournamentById, ResultWithError } from '../types/types';
 import logger from '../logger';
+import { GenericError } from '../errors/errorHandling';
 
 const baseUrl = ONCHAIN_CONFIG.devnet.BackendURL;
 const partnerApiKey = ONCHAIN_CONFIG.devnet.partnerApiKey;
@@ -15,7 +16,7 @@ export const createTournamentService = async (tournamentData: ICreateTournament)
         return { data: response.data.data, error: null };
     } catch (error) {
         logger.error(`Error creating tournament: ${error}`);
-        return { data: null, error: error instanceof Error ? error.message : String(error) };
+        throw new GenericError(error instanceof Error ? error.message : 'Unknown error', 500);
     }
 };
 
@@ -28,6 +29,6 @@ export const getTournamentByIdService = async (tournamentId: number): Promise<Re
         return { data: response.data.data as ITournamentById, error: null };
     } catch (error) {
         logger.error(`Error fetching tournament by ID: ${error}`);
-        return { data: null, error: error instanceof Error ? error.message : String(error) };
+        throw new GenericError(error instanceof Error ? error.message : 'Unknown error', 500);
     }
 };

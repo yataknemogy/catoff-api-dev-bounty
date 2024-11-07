@@ -1,6 +1,7 @@
 import { INotification, NOTIFICATION_TYPE, ResultWithError } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
 import logger from "../logger";
+import { GenericError } from "../errors/errorHandling";
 
 const notifications: INotification[] = [];
 
@@ -31,7 +32,7 @@ export class NotificationService {
             return { data: newNotification, error: null };
         } catch (error) {
             logger.error(`Error creating notification: ${error}`);
-            return { data: null, error: String(error) };
+            throw new GenericError(`Error creating notification: ${error}`, 500);
         }
     }
 
@@ -41,7 +42,7 @@ export class NotificationService {
             return { data: userNotifications, error: null };
         } catch (error) {
             logger.error(`Error fetching notifications for user ${userId}: ${error}`);
-            return { data: null, error: String(error) };
+            throw new GenericError(`Error fetching notifications: ${error}`, 500);
         }
     }
 
@@ -49,30 +50,29 @@ export class NotificationService {
         try {
             const notification = notifications.find(n => n.id === notificationId);
             if (!notification) {
-                return { data: null, error: "Notification not found." };
+                throw new GenericError("Notification not found", 404);
             }
             notification.isRead = true;
             logger.info(`Notification ${notificationId} marked as read.`);
             return { data: null, error: null };
         } catch (error) {
             logger.error(`Error marking notification as read: ${error}`);
-            return { data: null, error: String(error) };
+            throw new GenericError(`Error marking notification as read: ${error}`, 500);
         }
     }
 
-    // Удаление уведомления
     static async deleteNotification(notificationId: string): Promise<ResultWithError<null>> {
         try {
             const index = notifications.findIndex(n => n.id === notificationId);
             if (index === -1) {
-                return { data: null, error: "Notification not found." };
+                throw new GenericError("Notification not found", 404);
             }
             notifications.splice(index, 1);
             logger.info(`Notification ${notificationId} deleted.`);
             return { data: null, error: null };
         } catch (error) {
             logger.error(`Error deleting notification: ${error}`);
-            return { data: null, error: String(error) };
+            throw new GenericError(`Error deleting notification: ${error}`, 500);
         }
     }
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ONCHAIN_CONFIG } from '../config';
 import logger from '../logger';
+import { GenericError } from '../errors/errorHandling';
 
 const baseUrl = ONCHAIN_CONFIG.devnet.BackendURL;
 const partnerApiKey = ONCHAIN_CONFIG.devnet.partnerApiKey;
@@ -17,7 +18,8 @@ export const generateAIDescriptionService = async (name: string, participationTy
         });
         return { data: response.data, error: null };
     } catch (error) {
-        logger.error(`Error generating AI description: ${error}`);
-        return { data: null, error };
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        logger.error(`Error generating AI description: ${errorMessage}`);
+        throw new GenericError(`Error generating AI description: ${errorMessage}`, 500);
     }
 };

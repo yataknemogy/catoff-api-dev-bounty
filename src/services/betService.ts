@@ -26,3 +26,27 @@ export const placeBetService = async (betData: IPlaceBet): Promise<ResultWithErr
         return { data: null, error: error instanceof Error ? error.message : 'Unknown error' };
     }
 };
+
+export const getBetStatusService = async (betID: number): Promise<ResultWithError<BetResult>> => {
+    try {
+        const response = await axios.get(`${ONCHAIN_CONFIG.devnet.BackendURL}/bet/${betID}`, {
+            headers: { 'x-api-key': ONCHAIN_CONFIG.devnet.partnerApiKey },
+        });
+
+        if (!response.data.success) {
+            throw new Error('Invalid response from the server');
+        }
+
+        return {
+            data: {
+                success: true,
+                betID: response.data.betID,
+                transactionSignature: response.data.transactionSignature,
+            },
+            error: null,
+        };
+    } catch (error) {
+        logger.error(`Error fetching bet status: ${error}`);
+        return { data: null, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+};

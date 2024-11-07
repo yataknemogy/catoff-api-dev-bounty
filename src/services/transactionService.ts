@@ -19,7 +19,7 @@ export const createTransactionService = async (data: ICreateTransaction, signer:
         const { blockhash } = await connection.getLatestBlockhash("confirmed");
 
         if (data.currency === "SOL") {
-            const lamports = data.amount * Math.pow(10, 9); // Конвертация в лампорты
+            const lamports = data.amount * Math.pow(10, 9);
             const transferInstruction = SystemProgram.transfer({
                 fromPubkey: data.accountPublicKey,
                 toPubkey: data.recipientPublicKey,

@@ -5,7 +5,6 @@ import logger from "../logger";
 const notifications: INotification[] = [];
 
 export class NotificationService {
-    // Создание уведомления
     static async createNotification(
         userId: string,
         title: string,
@@ -36,7 +35,6 @@ export class NotificationService {
         }
     }
 
-    // Получение уведомлений пользователя
     static async getNotificationsByUserId(userId: string): Promise<ResultWithError<INotification[]>> {
         try {
             const userNotifications = notifications.filter(n => n.userId === userId);
@@ -47,7 +45,6 @@ export class NotificationService {
         }
     }
 
-    // Обновление статуса прочтения уведомления
     static async markNotificationAsRead(notificationId: string): Promise<ResultWithError<null>> {
         try {
             const notification = notifications.find(n => n.id === notificationId);

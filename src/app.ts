@@ -4,7 +4,10 @@ import cors from 'cors';
 import challengeRoutes from './routes/challengeRoutes';
 import descriptionRoutes from './routes/descriptionRoutes';
 import transactionRoutes from './routes/transactionRoutes';
+import tournamentRoutes from "./routes/tournamentRoutes";
+import betRoutes from "./routes/betRoutes";
 import 'express-async-errors';
+import notificationRoutes from "./routes/notificationRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +19,9 @@ app.use(bodyParser.json());
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/descriptions', descriptionRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/tournament', tournamentRoutes);
+app.use('/api/bet/', betRoutes);
+app.use('/api/notification', notificationRoutes);
 
 app.use((req: Request, res: Response) => {
     res.status(404).json({ message: 'Resource not found' });

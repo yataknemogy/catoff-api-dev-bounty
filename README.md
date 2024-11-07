@@ -14,7 +14,7 @@ An API key is required and should be included in the headers of each request.
 **Headers:**
 - `x-api-key`: Your API key.
 
-## Main Endpoints (Optional)
+## Main Endpoints
 
 The endpoints described below can be used depending on the goals and requirements of the developer.
 
